@@ -53,7 +53,10 @@ def app():
         choice = menu()
         if choice == 'v':
             # Create a function to handle getting and displaying a product by its product_id.
-            pass
+            id_selection = input('\nPlease enter the Product ID you wish to view: ')
+            for product in session.query(Inventory):
+                filter(Inventory.product_id == id_selection)
+                print(product.product_name)
         elif choice == 'a':
             # Create a function to handle adding a new product to the database
             pass
