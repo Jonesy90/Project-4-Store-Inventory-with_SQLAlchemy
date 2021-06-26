@@ -14,7 +14,11 @@ def menu():
         if users_choice in ['v', 'a', 'b']:
             return users_choice
         else:
-            print("Error -- INVALID ENTRY")
+            users_choice = input('''
+            \n**********MENU ERROR***********
+            \rInvalid Option (v = View, a = Add, b = Backup)
+            \rPress Enter to try again.
+            \r*****************************''')
 
 
 def clean_date(date_str):
