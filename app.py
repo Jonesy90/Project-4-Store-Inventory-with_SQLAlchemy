@@ -1,6 +1,7 @@
 from product import (Base, session, Inventory, engine)
 import datetime
 import csv
+import time
 
 def menu():
     while True:
@@ -102,6 +103,31 @@ def app():
 
         elif choice == 'a':
             # Create a function to handle adding a new product to the database
+            product_name = input('Product Name: ')
+            product_quantity = input('Product Quantity: ')
+            # product_price = input('Product Price: ')
+            # date_updated = datetime.date(datetime.now())
+
+            product_price_error = True
+            while product_price_error:
+                product_price = input('Product Price (E.g. $25.89): ')
+                product_price = clean_price(product_price)
+                if type(product_price) == int:
+                    product_price_error = False
+        
+            product_date_error = True
+            while product_date_error:
+                date_updated = input('Product Date (E.g. MONTH/DAY/YEAR): ')
+                date_updated = clean_date(date_updated)
+                if type(date_updated) == datetime.date:
+                    product_date_error = False
+
+
+            new_product = Inventory(product_name=product_name, product_quantity=product_quantity, product_price=product_price, date_updated=date_updated)
+            session.add(new_product)
+            session.commit()
+            print('New Product Added!!')
+            time.sleep(1.5)
             pass
         else :
             # Create a function to handle making a backup of the database. The backup should be written to a .csv file.
