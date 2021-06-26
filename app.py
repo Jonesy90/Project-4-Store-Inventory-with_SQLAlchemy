@@ -35,13 +35,12 @@ def clean_price(price_str):
 # Adding the CVS
 def add_csv():
     with open('store-inventory/inventory.csv') as csvfile:
-        data = csv.reader(csvfile)
-        data.__next__() #Skips the header row of the CSV file.
+        data = csv.DictReader(csvfile)
         for row in data:
-            product_name = row[0]
-            product_price = clean_price(row[1])
-            product_quantity = row[2]
-            date_updated = clean_date(row[3])
+            product_name = row['product_name']
+            product_price = clean_price(row['product_price'])
+            product_quantity = row['product_quantity']
+            date_updated = clean_date(row['date_updated'])
             new_product = Inventory(product_name=product_name, product_quantity=product_quantity, product_price=product_price, date_updated=date_updated)
             session.add(new_product)
         session.commit()
@@ -53,10 +52,12 @@ def app():
         choice = menu()
         if choice == 'v':
             # Create a function to handle getting and displaying a product by its product_id.
+            #Input message to ask the user which 'Product ID' they wish to view.
             id_selection = input('\nPlease enter the Product ID you wish to view: ')
+            # A FOR LOOP to go over the session and filter out the product with the same value as the users selection. Once found, print the 'Product Name'.
             for product in session.query(Inventory):
                 filter(Inventory.product_id == id_selection)
-                print(product.product_name)
+                print(f'{product.product_name}')
         elif choice == 'a':
             # Create a function to handle adding a new product to the database
             pass
@@ -69,7 +70,7 @@ def app():
 if __name__ == '__main__':
     #This will connect our engine with our model class to create our database table.
     Base.metadata.create_all(engine)
-    app()
+    # app()
     # add_csv()
 
     # for product in session.query(Inventory):
