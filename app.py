@@ -32,7 +32,29 @@ def clean_price(price_str):
     return int(price * 100)
 
 
-# Adding the CVS
+def clean_id(id_str, options):
+    try:
+        product_id = int(id_str)
+    except ValueError:
+        input('''
+        \n**********ID ERROR***********
+        \rThe ID should be an Integer.
+        \rPress Enter to try again.
+        \r*****************************''')
+        return
+    else:
+        if product_id in options:
+            return product_id
+        else:
+            input(f'''
+            \n**********ID ERROR*******
+            \rThe ID isn't valid.
+            \r{options}
+            \rPress Enter to try again.
+            \r*************************''')
+        return
+
+# Adding the CVS data the the 'inventroy.db'.
 def add_csv():
     with open('store-inventory/inventory.csv') as csvfile:
         data = csv.DictReader(csvfile)
@@ -50,14 +72,30 @@ def app():
     app_running = True
     while app_running:
         choice = menu()
+        # This choice allows the user to view a particular product.
         if choice == 'v':
-            # Create a function to handle getting and displaying a product by its product_id.
-            #Input message to ask the user which 'Product ID' they wish to view.
-            id_selection = input('\nPlease enter the Product ID you wish to view: ')
-            # A FOR LOOP to go over the session and filter out the product with the same value as the users selection. Once found, print the 'Product Name'.
+            # Creating an empty array to hold all the product ids.
+            ids_available = []
+            # Loops over the session and appends all the 'product IDs' into the 'ids_available' array.
             for product in session.query(Inventory):
-                filter(Inventory.product_id == id_selection)
-                print(f'{product.product_name}')
+                ids_available.append(product.product_id)
+            id_error = True
+            # Prints out the choices that are available to be viewed.
+            # Takes the 'Product ID' that the user wants to view.
+            # Takes the 'Product ID' the user wants to view an passes it to the 'clean_id' function that turns it into a Int and checks if it's valid and is available in the 'ids_available' array.
+            while id_error:
+                product_id_choice = input(f'''
+                    \nID OPTIONS): {ids_available}
+                    \rProduct ID: ''')
+                product_id_choice = clean_id(product_id_choice, ids_available)
+                # Checks the type of the user choice is an Integer.
+                if type(product_id_choice) == int:
+                    id_error = False
+            # A query to print out the 'Product Name' of the 'Product ID' the user wants to see.
+            the_product = session.query(Inventory).filter(Inventory.product_id == product_id_choice).first()
+            print(f'''
+            \nProduct Name: {the_product.product_name}''')
+
         elif choice == 'a':
             # Create a function to handle adding a new product to the database
             pass
@@ -70,7 +108,7 @@ def app():
 if __name__ == '__main__':
     #This will connect our engine with our model class to create our database table.
     Base.metadata.create_all(engine)
-    # app()
+    app()
     # add_csv()
 
     # for product in session.query(Inventory):
