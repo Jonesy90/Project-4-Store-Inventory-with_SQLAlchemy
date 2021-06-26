@@ -108,6 +108,7 @@ def app():
             # product_price = input('Product Price: ')
             # date_updated = datetime.date(datetime.now())
 
+            # Taking in the users price and running it through the 'clean_price' method.
             product_price_error = True
             while product_price_error:
                 product_price = input('Product Price (E.g. $25.89): ')
@@ -115,20 +116,22 @@ def app():
                 if type(product_price) == int:
                     product_price_error = False
         
+            # Taking in the current date and passing it through.
             product_date_error = True
             while product_date_error:
-                date_updated = input('Product Date (E.g. MONTH/DAY/YEAR): ')
+                date_updated = datetime.date.today().strftime('%Y/%m/%d')
                 date_updated = clean_date(date_updated)
                 if type(date_updated) == datetime.date:
                     product_date_error = False
 
 
+            # Adding the input from the values the users has entered above.
+            # Adding the new object to the session and commiting it.
             new_product = Inventory(product_name=product_name, product_quantity=product_quantity, product_price=product_price, date_updated=date_updated)
             session.add(new_product)
             session.commit()
             print('New Product Added!!')
             time.sleep(1.5)
-            pass
         else :
             # Create a function to handle making a backup of the database. The backup should be written to a .csv file.
             pass
