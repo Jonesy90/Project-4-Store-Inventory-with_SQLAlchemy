@@ -74,19 +74,16 @@ def add_csv():
 
 
 def database_backup():
-    with open('products.csv', 'a') as csv:
-        fieldnames = ['product_id', 'product_name', 'product_quantity', 'product_price', 'date_updated']
 
-        database_backup = csv.DictReader(csv, fieldnames = fieldnames)
-        database_backup.writeheader()
-        products = Inventory.select()
-        
-        for product in products:
-            database_backup.writerow({'product_id': product.product_id, 
-                                        'product_name': product.product_name, 
-                                        'product_quantity': product.product, 
-                                        'product_price': product.product_price, 
-                                        'date_updated': product.date_updated})
+    with open('backup_products.csv', 'a') as csvfile:
+        header_names = ['product_id', 'product_name', 'product_quantity', 'product_price', 'date_updated']
+        inventory_backup = csv.DictWriter(csvfile, fieldnames=header_names)
+        inventory_backup.writeheader()
+        inventory = Inventory.select()
+
+        for product in inventory:
+            # inventory_backup.writerow({'product_id': product.product_id, 'product_name': product.product_name, 'product_quantity': product.product_quantity, 'product_price': product.product_price, 'date_updated': product.date_updated})
+            print(product)
 
 
 def app():
