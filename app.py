@@ -74,17 +74,76 @@ def add_csv():
 
 
 def database_backup():
+    #Exports a back of the database to a CSV file.
+    # with open('backup_products.csv', 'a') as csvfile:
+    #     header_names = ['product_id', 'product_name', 'product_quantity', 'product_price', 'date_updated']
+    #     inventory_backup = csv.DictWriter(csvfile, fieldnames=header_names)
+    #     inventory_backup.writeheader()
+    #     products = Inventory.select()
 
-    with open('backup_products.csv', 'a') as csvfile:
-        header_names = ['product_id', 'product_name', 'product_quantity', 'product_price', 'date_updated']
-        inventory_backup = csv.DictWriter(csvfile, fieldnames=header_names)
-        inventory_backup.writeheader()
-        inventory = Inventory.select()
+    #     for product in products:
+    #         inventory_backup.writerow({'product_id': product.product_id, 'product_name': product.product_name, 'product_quantity': product.product_quantity, 'product_price': product.product_price, 'date_updated': product.date_updated})
+    pass
 
-        for product in inventory:
-            # inventory_backup.writerow({'product_id': product.product_id, 'product_name': product.product_name, 'product_quantity': product.product_quantity, 'product_price': product.product_price, 'date_updated': product.date_updated})
-            print(product)
 
+def view_database():
+    #Asks the user for a valid 'product_id' and prints it out.
+    # Creating an empty array to hold all the product ids.
+    ids_available = []
+    # Loops over the session and appends all the 'product IDs' into the 'ids_available' array.
+    for product in session.query(Inventory):
+        ids_available.append(product.product_id)
+    id_error = True
+    # Prints out the choices that are available to be viewed.
+    # Takes the 'Product ID' that the user wants to view.
+    # Takes the 'Product ID' the user wants to view an passes it to the 'clean_id' function that turns it into a Int and checks if it's valid and is available in the 'ids_available' array.
+    while id_error:
+        product_id_choice = input(f'''
+            \nID OPTIONS): {ids_available}
+            \rProduct ID: ''')
+        product_id_choice = clean_id(product_id_choice, ids_available)
+        # Checks the type of the user choice is an Integer.
+        if type(product_id_choice) == int:
+            id_error = False
+    # A query to print out the 'Product Name' of the 'Product ID' the user wants to see.
+    the_product = session.query(Inventory).filter(Inventory.product_id == product_id_choice).first()
+    print(f'''
+    \nProduct Name: {the_product.product_name}''')
+    pass
+
+
+def add_product():
+    #Add a new product to the database.
+    # Create a function to handle adding a new product to the database
+    product_name = input('Product Name: ')
+    product_quantity = input('Product Quantity: ')
+    # product_price = input('Product Price: ')
+    # date_updated = datetime.date(datetime.now())
+
+    # Taking in the users price and running it through the 'clean_price' method.
+    product_price_error = True
+    while product_price_error:
+        product_price = input('Product Price (E.g. $25.89): ')
+        product_price = clean_price(product_price)
+        if type(product_price) == int:
+            product_price_error = False
+
+    # Taking in the current date and passing it through.
+    product_date_error = True
+    while product_date_error:
+        date_updated = datetime.date.today().strftime('%Y/%m/%d')
+        date_updated = clean_date(date_updated)
+        if type(date_updated) == datetime.date:
+            product_date_error = False
+
+
+    # Adding the input from the values the users has entered above.
+    # Adding the new object to the session and commiting it.
+    new_product = Inventory(product_name=product_name, product_quantity=product_quantity, product_price=product_price, date_updated=date_updated)
+    session.add(new_product)
+    session.commit()
+    print('New Product Added!!')
+    time.sleep(1.5)
 
 def app():
     app_running = True
@@ -92,59 +151,9 @@ def app():
         choice = menu()
         # This choice allows the user to view a particular product.
         if choice == 'v':
-            # Creating an empty array to hold all the product ids.
-            ids_available = []
-            # Loops over the session and appends all the 'product IDs' into the 'ids_available' array.
-            for product in session.query(Inventory):
-                ids_available.append(product.product_id)
-            id_error = True
-            # Prints out the choices that are available to be viewed.
-            # Takes the 'Product ID' that the user wants to view.
-            # Takes the 'Product ID' the user wants to view an passes it to the 'clean_id' function that turns it into a Int and checks if it's valid and is available in the 'ids_available' array.
-            while id_error:
-                product_id_choice = input(f'''
-                    \nID OPTIONS): {ids_available}
-                    \rProduct ID: ''')
-                product_id_choice = clean_id(product_id_choice, ids_available)
-                # Checks the type of the user choice is an Integer.
-                if type(product_id_choice) == int:
-                    id_error = False
-            # A query to print out the 'Product Name' of the 'Product ID' the user wants to see.
-            the_product = session.query(Inventory).filter(Inventory.product_id == product_id_choice).first()
-            print(f'''
-            \nProduct Name: {the_product.product_name}''')
-
+            view_database()
         elif choice == 'a':
-            # Create a function to handle adding a new product to the database
-            product_name = input('Product Name: ')
-            product_quantity = input('Product Quantity: ')
-            # product_price = input('Product Price: ')
-            # date_updated = datetime.date(datetime.now())
-
-            # Taking in the users price and running it through the 'clean_price' method.
-            product_price_error = True
-            while product_price_error:
-                product_price = input('Product Price (E.g. $25.89): ')
-                product_price = clean_price(product_price)
-                if type(product_price) == int:
-                    product_price_error = False
-        
-            # Taking in the current date and passing it through.
-            product_date_error = True
-            while product_date_error:
-                date_updated = datetime.date.today().strftime('%Y/%m/%d')
-                date_updated = clean_date(date_updated)
-                if type(date_updated) == datetime.date:
-                    product_date_error = False
-
-
-            # Adding the input from the values the users has entered above.
-            # Adding the new object to the session and commiting it.
-            new_product = Inventory(product_name=product_name, product_quantity=product_quantity, product_price=product_price, date_updated=date_updated)
-            session.add(new_product)
-            session.commit()
-            print('New Product Added!!')
-            time.sleep(1.5)
+            add_product()
         else :
             # Create a function to handle making a backup of the database. The backup should be written to a .csv file.
             database_backup()
