@@ -81,7 +81,9 @@ def database_backup():
         backup.writeheader()
 
         for product in session.query(Inventory).order_by(Inventory.product_id).all():
-            backup.writerow({'product_id': product.product_id, 'product_name': product.product_name, 'product_price': product.product_price, 'product_quantity': product.product_quantity, 'date_updated': product.date_updated})
+            product_price = '$' + str(product.product_price / 100)
+            product_date = product.date_updated.strftime('%m/%d/%Y')
+            backup.writerow({'product_id': product.product_id, 'product_name': product.product_name, 'product_price': product_price, 'product_quantity': product.product_quantity, 'date_updated': product_date})
 
 
 
@@ -156,6 +158,8 @@ def app():
         else :
             # Create a function to handle making a backup of the database. The backup should be written to a .csv file.
             database_backup()
+            print("****CSV EXPORT COMPLETED****")
+            time.sleep(1.5)
 
 
 
