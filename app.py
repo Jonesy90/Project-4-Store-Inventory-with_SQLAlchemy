@@ -75,15 +75,14 @@ def add_csv():
 
 def database_backup():
     #Exports a back of the database to a CSV file.
-    # with open('backup_products.csv', 'a') as csvfile:
-    #     header_names = ['product_id', 'product_name', 'product_quantity', 'product_price', 'date_updated']
-    #     inventory_backup = csv.DictWriter(csvfile, fieldnames=header_names)
-    #     inventory_backup.writeheader()
-    #     products = Inventory.select()
+    with open('inventory_backup.csv', 'w') as csvfile:
+        headers = ['product_id', 'product_name', 'product_quantity', 'product_price', 'date_updated']
+        backup = csv.DictWriter(csvfile, fieldnames=headers)
+        backup.writeheader()
 
-    #     for product in products:
-    #         inventory_backup.writerow({'product_id': product.product_id, 'product_name': product.product_name, 'product_quantity': product.product_quantity, 'product_price': product.product_price, 'date_updated': product.date_updated})
-    pass
+        for product in session.query(Inventory).order_by(Inventory.product_id).all():
+            backup.writerow({'product_id': product.product_id, 'product_name': product.product_name, 'product_price': product.product_price, 'product_quantity': product.product_quantity, 'date_updated': product.date_updated})
+
 
 
 def view_database():

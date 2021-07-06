@@ -1,0 +1,29 @@
+product_id,product_name,product_quantity,product_price,date_updated
+1,Bagel - Whole White Sesame,97,430,2018-11-01
+2,Sauce - Caesar Dressing,81,805,2018-12-28
+3,Shiratamako - Rice Flour,71,799,2018-03-07
+4,Tart - Raisin And Pecan,86,106,2019-01-18
+5,Radish,22,247,2018-11-06
+6,Juice - V8 Splash,67,125,2018-01-10
+7,Red Currants,49,677,2018-10-01
+8,Soup - Base Broth Beef,62,544,2019-03-09
+9,Tomatoes Tear Drop Yellow,73,64,2019-02-09
+10,Mussels - Cultivated,24,934,2018-07-31
+11,"Bread - Crumbs, Bulk",88,449,2019-01-12
+12,"Beans - Long, Chinese",47,473,2018-09-22
+13,"Beans - Navy, Dry",44,459,2018-01-20
+14,Juice - V8 Splash,67,114,2018-01-13
+15,"Basil - Dry, Rubbed",21,869,2018-02-04
+16,Apple - Granny Smith,72,505,2018-01-12
+17,"Lid - High Heat, Super Clear",5,123,2018-02-09
+18,Oranges - Navel,46,478,2018-06-06
+19,Berry Brulee,50,759,2018-08-25
+20,Lobster - Canned Premium,57,761,2018-04-15
+21,Sauce - Caesar Dressing,16,825,2019-04-10
+22,Ham - Procutinni,8,570,2019-01-09
+23,Veal - Ground,5,767,2018-12-19
+24,Oil - Cooking Spray,6,420,2018-06-11
+25,"Extract - Vanilla,artificial",20,291,2018-06-08
+26,"Mushroom - Porcini, Dry",71,814,2018-07-26
+27,Wine - Chateau Bonnet,54,741,2018-03-10
+28,Test,12,2699,2021-06-26
