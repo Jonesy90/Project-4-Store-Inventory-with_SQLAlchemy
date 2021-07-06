@@ -20,7 +20,7 @@ class Inventory(Base):
     date_updated = Column('Date Updated', Date)
 
     def __repr__(self):
-        return f'<Inventory(Product Name={self.product_name}, Product Quantity={self.product_quantity}, Product Price={self.product_price}, Date Updated={self.date_updated})'
+        return f'<Inventory(Product Name={self.product_name}, Product Price={self.product_price}, Product Quantity={self.product_quantity}, Date Updated={self.date_updated})'
 
 
 

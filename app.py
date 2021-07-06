@@ -68,7 +68,7 @@ def add_csv():
             product_price = clean_price(row['product_price'])
             product_quantity = row['product_quantity']
             date_updated = clean_date(row['date_updated'])
-            new_product = Inventory(product_name=product_name, product_quantity=product_quantity, product_price=product_price, date_updated=date_updated)
+            new_product = Inventory(product_name=product_name, product_price=product_price, product_quantity=product_quantity, date_updated=date_updated)
             session.add(new_product)
         session.commit()
 
