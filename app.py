@@ -117,9 +117,8 @@ def add_product():
     #Add a new product to the database.
     # Create a function to handle adding a new product to the database
     product_name = input('Product Name: ')
+
     product_quantity = input('Product Quantity: ')
-    # product_price = input('Product Price: ')
-    # date_updated = datetime.date(datetime.now())
 
     # Taking in the users price and running it through the 'clean_price' method.
     product_price_error = True
@@ -162,13 +161,8 @@ def app():
             time.sleep(1.5)
 
 
-
 if __name__ == '__main__':
     #This will connect our engine with our model class to create our database table.
     Base.metadata.create_all(engine)
     app()
-    # add_csv()
-
-    # for product in session.query(Inventory):
-    #     print(product)
 
