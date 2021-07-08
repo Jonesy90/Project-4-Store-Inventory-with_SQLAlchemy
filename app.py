@@ -64,12 +64,14 @@ def add_csv():
     with open('store-inventory/inventory.csv') as csvfile:
         data = csv.DictReader(csvfile)
         for row in data:
-            product_name = row['product_name']
-            product_price = clean_price(row['product_price'])
-            product_quantity = row['product_quantity']
-            date_updated = clean_date(row['date_updated'])
-            new_product = Inventory(product_name=product_name, product_price=product_price, product_quantity=product_quantity, date_updated=date_updated)
-            session.add(new_product)
+            product_in_db = session.query(Inventory).filter(Inventory.product_name==row['product_name']).one_or_none()
+            if product_in_db == None:
+                product_name = row['product_name']
+                product_price = clean_price(row['product_price'])
+                product_quantity = row['product_quantity']
+                date_updated = clean_date(row['date_updated'])
+                new_product = Inventory(product_name=product_name, product_price=product_price, product_quantity=product_quantity, date_updated=date_updated)
+                session.add(new_product)
         session.commit()
 
 
@@ -131,7 +133,7 @@ def add_product():
     # Taking in the current date and passing it through.
     product_date_error = True
     while product_date_error:
-        date_updated = datetime.date.today().strftime('%Y/%m/%d')
+        date_updated = datetime.date.today().strftime('%m/%d/%Y')
         date_updated = clean_date(date_updated)
         if type(date_updated) == datetime.date:
             product_date_error = False
@@ -146,6 +148,7 @@ def add_product():
     time.sleep(1.5)
 
 def app():
+    add_csv()
     app_running = True
     while app_running:
         choice = menu()
