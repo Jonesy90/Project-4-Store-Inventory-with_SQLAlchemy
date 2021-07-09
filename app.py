@@ -3,6 +3,8 @@ import datetime
 import csv
 import time
 
+#A menu allowing the user to choose what action to take.
+#If invalid entry is entered, an error message will show and ask them to try again.
 def menu():
     while True:
         print('''
@@ -22,6 +24,7 @@ def menu():
             \r*****************************''')
 
 
+#Before placing the date into the db, it will clean the date.
 def clean_date(date_str):
     date_split = date_str.split('/')
     day = int(date_split[1])
@@ -31,12 +34,14 @@ def clean_date(date_str):
     return datetime.date(year, month, day)
 
 
+#Before placing the price into the db, it will remove the '$' symbol and covert it to a integer.
 def clean_price(price_str):
     price_split = price_str.split('$')[1]
     price = float(price_split)
     return int(price * 100)
 
 
+#
 def clean_id(id_str, options):
     try:
         product_id = int(id_str)
@@ -115,7 +120,7 @@ def view_database():
     pass
 
 
-def edit_product(product_name, current_value):
+def edit_product(column_name, current_value):
     pass
 
 def add_product():
