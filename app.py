@@ -118,45 +118,44 @@ def view_database():
     print(f'''
     \nProduct Name: {the_product.product_name}''')
     pass
+           
 
-
-def edit_product(column_name, current_value):
-    pass
 
 def add_product():
     #Add a new product to the database.
     # Create a function to handle adding a new product to the database
     product_name = input('Product Name: ')
-    if session.query(Inventory).filter(Inventory.product_name==product_name).one_or_none() == None:
-        product_quantity = input('Product Quantity: ')
+    product_quantity = input('Product Quantity: ')
+    product_price = input('Product Price (E.g. $25.89): ')
 
-        # Taking in the users price and running it through the 'clean_price' method.
-        product_price_error = True
-        while product_price_error:
-            product_price = input('Product Price (E.g. $25.89): ')
-            product_price = clean_price(product_price)
-            if type(product_price) == int:
-                product_price_error = False
+    # Taking in the users price and running it through the 'clean_price' method.
+    product_price_error = True
+    while product_price_error:
+        product_price = clean_price(product_price)
+        if type(product_price) == int:
+            product_price_error = False
 
-        # Taking in the current date and passing it through.
-        product_date_error = True
-        while product_date_error:
-            date_updated = datetime.date.today().strftime('%m/%d/%Y')
-            date_updated = clean_date(date_updated)
-            if type(date_updated) == datetime.date:
-                product_date_error = False
+    # Taking in the current date and passing it through.
+    product_date_error = True
+    while product_date_error:
+        date_updated = datetime.date.today().strftime('%m/%d/%Y')
+        date_updated = clean_date(date_updated)
+        if type(date_updated) == datetime.date:
+            product_date_error = False
 
+    new_product = Inventory(product_name=product_name, product_quantity=product_quantity, product_price=product_price, date_updated=date_updated)
 
-        # Adding the input from the values the users has entered above.
-        # Adding the new object to the session and commiting it.
-        new_product = Inventory(product_name=product_name, product_quantity=product_quantity, product_price=product_price, date_updated=date_updated)
+    if session.query(Inventory).filter(Inventory.product_name==new_product.product_name).first():
+        session.query(Inventory).filter(Inventory.product_name==new_product.product_name).update({
+            Inventory.product_quantity: new_product.product_quantity,
+            Inventory.product_price: new_product.product_price,
+            Inventory.date_updated: new_product.date_updated})
+
+    else:
         session.add(new_product)
         session.commit()
-        print('***New Product Added!!***')
-    else:
-        #If the 'product_name' exists. Update the 'product_quantity', 'product_price' and 'date_updated'.
-        pass
-    time.sleep(1.5)
+        print('****PRODUCT UPDATED/CREATE****')
+        time.sleep(1.5)
 
 def app():
     add_csv()
