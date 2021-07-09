@@ -15,8 +15,8 @@ class Inventory(Base):
 
     product_id = Column(Integer, primary_key=True)
     product_name = Column('Product Name', String)
-    product_quantity = Column('Procut Quantity', Integer)
     product_price = Column('Product Price', Integer) #Will be stored as Integer and converted.
+    product_quantity = Column('Product Quantity', Integer)
     date_updated = Column('Date Updated', Date)
 
     def __repr__(self):

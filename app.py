@@ -36,12 +36,11 @@ def clean_date(date_str):
 
 #Before placing the price into the db, it will remove the '$' symbol and covert it to a integer.
 def clean_price(price_str):
-    price_split = price_str.split('$')[1]
-    price = float(price_split)
-    return int(price * 100)
+        price_split = price_str.split('$')[1]
+        price = float(price_split)
+        return int(price * 100)
 
 
-#
 def clean_id(id_str, options):
     try:
         product_id = int(id_str)
@@ -64,7 +63,7 @@ def clean_id(id_str, options):
             \r*************************''')
         return
 
-# Adding the CVS data the the 'inventroy.db'.
+# Adding the CSV data to 'inventroy.db'.
 def add_csv():
     with open('store-inventory/inventory.csv') as csvfile:
         data = csv.DictReader(csvfile)
@@ -72,8 +71,8 @@ def add_csv():
             product_in_db = session.query(Inventory).filter(Inventory.product_name==row['product_name']).one_or_none()
             if product_in_db == None:
                 product_name = row['product_name']
-                product_price = clean_price(row['product_price'])
                 product_quantity = row['product_quantity']
+                product_price = clean_price(row['product_price'])
                 date_updated = clean_date(row['date_updated'])
                 new_product = Inventory(product_name=product_name, product_price=product_price, product_quantity=product_quantity, date_updated=date_updated)
                 session.add(new_product)
@@ -90,7 +89,7 @@ def database_backup():
         for product in session.query(Inventory).order_by(Inventory.product_id).all():
             product_price = '$' + str(product.product_price / 100)
             product_date = product.date_updated.strftime('%m/%d/%Y')
-            backup.writerow({'product_id': product.product_id, 'product_name': product.product_name, 'product_price': product_price, 'product_quantity': product.product_quantity, 'date_updated': product_date})
+            backup.writerow({'product_id': product.product_id, 'product_name': product.product_name, 'product_price': product_price, 'product_quantity': str(product.product_quantity), 'date_updated': product_date})
 
 
 
@@ -117,7 +116,6 @@ def view_database():
     the_product = session.query(Inventory).filter(Inventory.product_id == product_id_choice).first()
     print(f'''
     \nProduct Name: {the_product.product_name}''')
-    pass
            
 
 
