@@ -145,6 +145,8 @@ def add_product():
 
     new_product = Inventory(product_name=product_name, product_quantity=product_quantity, product_price=product_price, date_updated=date_updated)
 
+    #Updating the 'product_quantity', 'product_price' and 'date_updated' if the 'product_name' already exists in the db.
+    #Otherwise, create a new product and commit it.
     if session.query(Inventory).filter(Inventory.product_name==new_product.product_name).first():
         session.query(Inventory).filter(Inventory.product_name==new_product.product_name).update({
             Inventory.product_quantity: new_product.product_quantity,
