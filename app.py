@@ -115,7 +115,11 @@ def view_database():
     # A query to print out the 'Product Name' of the 'Product ID' the user wants to see.
     the_product = session.query(Inventory).filter(Inventory.product_id == product_id_choice).first()
     print(f'''
-    \nProduct Name: {the_product.product_name}''')
+    \nProduct Name: {the_product.product_name}
+    \rProduct Price: ${int(the_product.product_price)/100}
+    \rProduct Quantity: {the_product.product_quantity}
+    \rDate Updated: {the_product.date_updated}''')
+    
            
 
 
