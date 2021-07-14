@@ -120,24 +120,38 @@ def view_database():
     \rProduct Quantity: {the_product.product_quantity}
     \rDate Updated: {the_product.date_updated}''')
     
-           
-
 
 def add_product():
     #Add a new product to the database.
     # Create a function to handle adding a new product to the database
     product_name = input('Product Name: ')
+
     product_quantity = input('Product Quantity: ')
-    product_price = input('Product Price (E.g. $25.89): ')
+    try:
+        product_quantity = int(product_quantity)
+    except ValueError:
+        input('''
+        \n******ERROR******
+        \rInvalid Value Entered.
+        \rPress Enter to try again.
+        \r*****************
+        ''')
+        return
 
-    # Taking in the users price and running it through the 'clean_price' method.
-    product_price_error = True
-    while product_price_error:
-        product_price = clean_price(product_price)
-        if type(product_price) == int:
-            product_price_error = False
+    product_price = input('Product Price (E.g. 25.89): ')
+    try:
+        product_price = float(product_price)
+        product_price = (product_price * 100)
+    except (ValueError):
+        input('''
+        \n******ERROR******
+        \rInvalid Value Entered.
+        \rPress Enter to try again.
+        \r*****************
+        ''')
+        return
 
-    # Taking in the current date and passing it through.
+    #Taking in the current date and passing it through.
     product_date_error = True
     while product_date_error:
         date_updated = datetime.date.today().strftime('%m/%d/%Y')
