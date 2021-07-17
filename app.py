@@ -13,7 +13,7 @@ def menu():
                 \ra : ADD
                 \rb : BACKUP
             ''')
-        users_choice = input('Please select a option:  ')
+        users_choice = input('Please select a option:  ').lower()
         if users_choice in ['v', 'a', 'b']:
             return users_choice
         else:
