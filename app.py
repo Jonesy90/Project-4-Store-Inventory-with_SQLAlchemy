@@ -41,6 +41,7 @@ def clean_price(price_str):
         return int(price * 100)
 
 
+#Cleaning the date before it's place in the db.
 def clean_id(id_str, options):
     try:
         product_id = int(id_str)
@@ -69,14 +70,24 @@ def add_csv():
         data = csv.DictReader(csvfile)
         for row in data:
             product_in_db = session.query(Inventory).filter(Inventory.product_name==row['product_name']).one_or_none()
+            product_name = row['product_name']
+            product_quantity = row['product_quantity']
+            product_quantity = int(product_quantity)
+            product_price = clean_price(row['product_price'])
+            date_updated = clean_date(row['date_updated'])
+            new_product = Inventory(product_name=product_name, product_price=product_price, product_quantity=product_quantity, date_updated=date_updated)
+            #If doesn't exist in db, then add it.
             if product_in_db == None:
-                product_name = row['product_name']
-                product_quantity = row['product_quantity']
-                product_price = clean_price(row['product_price'])
-                date_updated = clean_date(row['date_updated'])
-                new_product = Inventory(product_name=product_name, product_price=product_price, product_quantity=product_quantity, date_updated=date_updated)
                 session.add(new_product)
+            else:
+                #If already exists. Update the 'product_quantity', 'product_price' and 'date_updated'.
+                session.query(Inventory).filter(Inventory.product_name==new_product.product_name).update({
+                    Inventory.product_quantity: new_product.product_quantity,
+                    Inventory.product_price: new_product.product_price,
+                    Inventory.date_updated: new_product.date_updated})
+                
         session.commit()
+
 
 
 def database_backup():
@@ -142,7 +153,7 @@ def add_product():
     try:
         product_price = float(product_price)
         product_price = (product_price * 100)
-    except (ValueError):
+    except ValueError:
         input('''
         \n******ERROR******
         \rInvalid Value Entered.
@@ -152,12 +163,8 @@ def add_product():
         return
 
     #Taking in the current date and passing it through.
-    product_date_error = True
-    while product_date_error:
-        date_updated = datetime.date.today().strftime('%m/%d/%Y')
-        date_updated = clean_date(date_updated)
-        if type(date_updated) == datetime.date:
-            product_date_error = False
+    date_updated = datetime.date.today().strftime('%m/%d/%Y')
+    date_updated = clean_date(date_updated)
 
     new_product = Inventory(product_name=product_name, product_quantity=product_quantity, product_price=product_price, date_updated=date_updated)
 
