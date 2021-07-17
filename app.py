@@ -81,10 +81,11 @@ def add_csv():
                 session.add(new_product)
             else:
                 #If already exists. Update the 'product_quantity', 'product_price' and 'date_updated'.
-                session.query(Inventory).filter(Inventory.product_name==new_product.product_name).update({
-                    Inventory.product_quantity: new_product.product_quantity,
-                    Inventory.product_price: new_product.product_price,
-                    Inventory.date_updated: new_product.date_updated})
+                if session.query(Inventory).filter(Inventory.date_updated < new_product.date_updated):
+                    session.query(Inventory).filter(Inventory.product_name==new_product.product_name).update({
+                        Inventory.product_quantity: new_product.product_quantity,
+                        Inventory.product_price: new_product.product_price,
+                        Inventory.date_updated: new_product.date_updated})
                 
         session.commit()
 
