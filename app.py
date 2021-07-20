@@ -87,7 +87,7 @@ def add_csv():
                         Inventory.product_price: new_product.product_price,
                         Inventory.date_updated: new_product.date_updated})
                 
-        session.commit()
+            session.commit()
 
 
 
@@ -169,10 +169,10 @@ def add_product():
 
     new_product = Inventory(product_name=product_name, product_quantity=product_quantity, product_price=product_price, date_updated=date_updated)
     is_in_db = session.query(Inventory).filter(Inventory.product_name==new_product.product_name).one_or_none()
-
-    if is_in_db != None:
-        is_in_db.product_quantity = new_product.product_quantity,
-        is_in_db.product_price = new_product.product_price,
+    
+    if is_in_db is not None:
+        is_in_db.product_quantity = new_product.product_quantity
+        is_in_db.product_price = new_product.product_price
         is_in_db.date_updated = new_product.date_updated
         session.commit()
 
